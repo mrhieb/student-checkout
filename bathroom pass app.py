@@ -138,12 +138,15 @@ def going_bathroom():
 
 def going_drink():
     Text(app, 'Go get a drink')
+    reset_screen()
 
 def going_nurse():
     Text(app, 'Go to nurse')
+    reset_screen()
 
 def going_other():
     Text(app, 'Go to other')
+    reset_screen()
     
 
 app = App(title = 'Pass collector', bg = (200, 30, 30))
