@@ -4,9 +4,7 @@ import time
 '''
 Next steps....
 
-Have a space to label the students that are gone and the students that
-are waiting to leave the classroom.
-Limit the number of students leaving to 2.
+Limit the number of students leaving.
 Properly clear the screen 3 seconds after they choose a location or report
 back to class.  If a student returns back to class, take their name off the gui.
 
@@ -15,13 +13,21 @@ back to class.  If a student returns back to class, take their name off the gui.
 class_number = 0
 disk_number = 0
 combo = ''
-student_reason={}
+temp_out_of_class = []
 out_of_class1=[]
 out_of_class2 = []
 out_of_class3 = []
 out_of_class4 = []
 out_of_class5 = []
-reasons = []
+current_name = ''
+current_place = ''
+current_start_time = 0
+aoc1_text = ''
+aoc2_text = ''
+aoc3_text = ''
+aoc4_text = ''
+aoc5_text = ''
+
 def reset_screen():
     combo.visible = False
     disk_number_text.value =''
@@ -49,6 +55,7 @@ def specific_names():
     global class_number
     global disk_number
     global combo
+    global current_name
     disk_number = int(combo.value)
     with open('StudentNames.csv') as csv_file:
         csv_reader = csv.reader(csv_file, delimiter = ',')
@@ -56,8 +63,15 @@ def specific_names():
         for row in csv_reader:
             if line_count == class_number:
                 name_space.value =row[disk_number]
+                print(row[disk_number])
+                
+                
+                temp_out_of_class.append(row[disk_number])
+                current_name = row[disk_number]
+                '''
                 if len(out_of_class1)==0:
                     out_of_class1.append(row[disk_number])
+                
                 elif len(out_of_class2) == 0:
                     out_of_class2.append(row[disk_number])
                 elif len(out_of_class3) == 0:
@@ -66,6 +80,7 @@ def specific_names():
                     out_of_class4.append(row[disk_number])
                 elif len(out_of_class2) == 0:
                     out_of_class5.append(row[disk_number])
+                '''
                 checkout_button.visible = True
                 checkin_button.visible = True
             line_count+=1
@@ -74,6 +89,7 @@ def first_hour():
     global class_number
     global disk_number
     global combo
+    temp_out_of_class = []
     hour1.bg = 'white'
     hour2.bg = 'white'
     hour3.bg = 'white'
@@ -91,6 +107,7 @@ def second_hour():
     global class_number
     global disk_number
     global combo
+    temp_out_of_class = []
     class_number = 1
     hour1.bg = 'white'
     hour2.bg = 'white'
@@ -105,6 +122,7 @@ def third_hour():
     global class_number
     global disk_number
     global combo
+    temp_out_of_class = []
     class_number = 2
     hour1.bg = 'white'
     hour2.bg = 'white'
@@ -119,6 +137,7 @@ def fourth_hour():
     global class_number
     global disk_number
     global combo
+    temp_out_of_class = []
     class_number = 3
     hour1.bg = 'white'
     hour2.bg = 'white'
@@ -133,6 +152,7 @@ def fifth_hour():
     global class_number
     global disk_number
     global combo
+    temp_out_of_class = []
     class_number = 4
     hour1.bg = 'white'
     hour2.bg = 'white'
@@ -147,6 +167,7 @@ def sixth_hour():
     global class_number
     global disk_number
     global combo
+    temp_out_of_class = []
     class_number = 5
     hour1.bg = 'white'
     hour2.bg = 'white'
@@ -165,44 +186,144 @@ def checkout_options():
     other.visible = True
 
 def welcome_back():
+    global aoc1_text, aoc2_text, aoc3_text, aoc4_text, aoc5_text
     end_time = time.time()
     total_time = end_time-out_of_class1[1]
+    if current_name == out_of_class1[0]:
+        print('yes1')
+        out_of_class1.append(total_time)
+        record_data(out_of_class1)
+        aoc1_text.destroy()
+        
+    elif current_name == out_of_class2[0]:
+        print('yes2')
+        out_of_class2.append(total_time)
+        record_data(out_of_class2)
+    elif current_name == out_of_class3[0]:
+        print('yes3')
+        out_of_class3.append(total_time)
+        record_data(out_of_class3)
+    elif current_name == out_of_class4[0]:
+        print('yes4')
+        out_of_class4.append(total_time)
+        record_data(out_of_class4)
+    elif current_name == out_of_class5[0]:
+        print('yes5')
+        out_of_class5.append(total_time)
+        record_data(out_of_class5)
     out_of_class1.append(total_time)
     welcome_text.value = 'Welcome back to class!!!'
     welcome_text.text_size = 40
     welcome_text.text_color = 'white'
-    reset_screen()
-    record_data(out_of_class1)
+    #reset_screen()
+    
     
     
 def going_bathroom():
+    global aoc1_text, aoc2_text, aoc3_text, aoc4_text, aoc5_text
     start_time = time.time()
+    if len(out_of_class1) == 0:
+        out_of_class1.append(current_name)
+        out_of_class1.append(start_time)
+        out_of_class1.append('bathroom')
+        aoc1_text = Text(student_out_box_left, current_name+ '----   bathroom')
+    elif len(out_of_class2) == 0:
+        out_of_class2.append(current_name)
+        out_of_class2.append(start_time)
+        out_of_class2.append('bathroom')
+        aoc2_text = Text(student_out_box_left, current_name+ '----   bathroom')
+    elif len(out_of_class3) == 0:
+        out_of_class3.append(current_name)
+        out_of_class3.append(start_time)
+        out_of_class3.append('bathroom')
+        aoc3_text = Text(student_out_box_left, current_name+ '----   bathroom')
+    elif len(out_of_class4) == 0:
+        out_of_class4.append(current_name)
+        out_of_class4.append(start_time)
+        out_of_class4.append('bathroom')
+        aoc4_text = Text(student_out_box_left, current_name+ '----   bathroom')
+    elif len(out_of_class5) == 0:
+        out_of_class5.append(current_name)
+        out_of_class5.append(start_time)
+        out_of_clas5.append('bathroom')
+        aoc5_text = Text(student_out_box_left, current_name+ '----   bathroom')
     
-    out_of_class1.append(start_time)
-    out_of_class1.append('bathroom')
-    Text(app, out_of_class1[0]+ ' to the bathroom')
     reset_screen()
 
 
 def going_drink():
     start_time = time.time()
-    out_of_class1.append(start_time)
-    out_of_class1.append('drink')
-    Text(app, out_of_class1[0]+'Go get a drink')
+    if len(out_of_class1) == 0:
+        out_of_class1.append(current_name)
+        out_of_class1.append(start_time)
+        out_of_class1.append('drink')
+    elif len(out_of_class2) == 0:
+        out_of_class2.append(current_name)
+        out_of_class2.append(start_time)
+        out_of_class2.append('drink')
+    elif len(out_of_class3) == 0:
+        out_of_class3.append(current_name)
+        out_of_class3.append(start_time)
+        out_of_class3.append('drink')
+    elif len(out_of_class4) == 0:
+        out_of_class4.append(current_name)
+        out_of_class4.append(start_time)
+        out_of_class4.append('drink')
+    elif len(out_of_class5) == 0:
+        out_of_class5.append(current_name)
+        out_of_class5.append(start_time)
+        out_of_clas5.append('drink')
+    Text(student_out_box_left, current_name+'----   drink')
     reset_screen()
 
 def going_nurse():
     start_time = time.time()
-    out_of_class1.append(start_time)
-    out_of_class1.append('nurse')
-    Text(app, out_of_class1[0]+'Go to nurse')
+    if len(out_of_class1) == 0:
+        out_of_class1.append(current_name)
+        out_of_class1.append(start_time)
+        out_of_class1.append('nurse')
+    elif len(out_of_class2) == 0:
+        out_of_class2.append(current_name)
+        out_of_class2.append(start_time)
+        out_of_class2.append('nurse')
+    elif len(out_of_class3) == 0:
+        out_of_class3.append(current_name)
+        out_of_class3.append(start_time)
+        out_of_class3.append('nurse')
+    elif len(out_of_class4) == 0:
+        out_of_class4.append(current_name)
+        out_of_class4.append(start_time)
+        out_of_class4.append('nurse')
+    elif len(out_of_class5) == 0:
+        out_of_class5.append(current_name)
+        out_of_class5.append(start_time)
+        out_of_clas5.append('nurse')
+    Text(student_out_box_left, current_name+'Go to----   nurse')
     reset_screen()
 
 def going_other():
     start_time = time.time()
-    out_of_class1.append(start_time)
-    out_of_class1.append('other')
-    Text(app, out_of_class1[0]+'Go to other')
+    if len(out_of_class1) == 0:
+        out_of_class1.append(current_name)
+        out_of_class1.append(start_time)
+        out_of_class1.append('other')
+    elif len(out_of_class2) == 0:
+        out_of_class2.append(current_name)
+        out_of_class2.append(start_time)
+        out_of_class2.append('other')
+    elif len(out_of_class3) == 0:
+        out_of_class3.append(current_name)
+        out_of_class3.append(start_time)
+        out_of_class3.append('other')
+    elif len(out_of_class4) == 0:
+        out_of_class4.append(current_name)
+        out_of_class4.append(start_time)
+        out_of_class4.append('other')
+    elif len(out_of_class5) == 0:
+        out_of_class5.append(current_name)
+        out_of_class5.append(start_time)
+        out_of_clas5.append('other')
+    Text(student_out_box_left, current_name+'----   other')
     reset_screen()
     
 
@@ -256,5 +377,10 @@ bathroom.visible = False
 drink.visible = False
 nurse.visible = False
 other.visible = False
-
+students_out_box = Box(app, layout = 'grid', border = 1, width = 800, height = 400)
+students_out_box.bg = 'white'
+student_out_box_left = Box(students_out_box, border = 2, grid = [1,1], height = 400,width = 400 )
+student_out_box_right = Box(students_out_box, border = 2, grid = [2,1], height = 400,width = 400 )
+student_out_list = Text(student_out_box_left, 'Students Out of Classroom', width = 45)
+student_waiting_list = Text(student_out_box_right, 'Students Waiting', width = 45)
 app.display()
