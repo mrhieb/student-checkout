@@ -91,6 +91,7 @@ def check_times():
         class_number = 6
     disk_number_text.value = 'Is this you?'
     combo.visible = True
+    print(class_number)
     
 def checkout_options():
     bathroom.visible = True
@@ -362,11 +363,11 @@ def going_locker():
     starting = time.strftime('%H:%M')
     if len(out_of_class1) != 0:# and len(out_of_class2) != 0 and len(out_of_class3) != 0  and len(out_of_class4) != 0  and len(out_of_class5) != 0 :
         app.warn(title = 'Student Checkout Exeeded Limit', text = 'Wait until students return before leaving the classroom')
-#     if len(out_of_class1) == 0:
-#         out_of_class1.append(current_name)
-#         out_of_class1.append(start_time)
-#         out_of_class1.append('locker')
-#         aoc1_text = Text(student_out_box_left, current_name+ '----   locker')
+    if len(out_of_class1) == 0:
+        out_of_class1.append(current_name)
+        out_of_class1.append(start_time)
+        out_of_class1.append('locker')
+        aoc1_text = Text(student_out_box_left, current_name+ '----   locker')
 #     elif len(out_of_class2) == 0:
 #         out_of_class2.append(current_name)
 #         out_of_class2.append(start_time)
