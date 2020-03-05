@@ -87,7 +87,7 @@ def check_times():
         class_number = 4
     elif datetime.time(12, 39, 0)<datetime.datetime.now().time()<datetime.time(13, 32, 0):
         class_number = 5
-    elif datetime.time(13,32,0)<datetime.datetime.now().time()<datetime.time(2,25,0):
+    elif datetime.time(13,32,0)<datetime.datetime.now().time()<datetime.time(14,25,0):
         class_number = 6
     disk_number_text.value = 'Is this you?'
     combo.visible = True
@@ -104,7 +104,7 @@ def checkout_options():
 def welcome_back():
     global aoc1_text, aoc2_text, aoc3_text, aoc4_text, aoc5_text
     global out_of_class1, out_of_class2, out_of_class3, out_of_class4, out_of_class5
-    global students_out_counter
+    global students_out_counter, app
     end_time = time.time()
     total_time = 0
     if len(out_of_class1) != 0:
@@ -199,15 +199,17 @@ def welcome_back():
     welcome_text.value = 'Welcome back to class!!!'
     welcome_text.text_size = 40
     welcome_text.text_color = 'white'
+    app.bg = (30, 200, 30)
     app.after(1000, reset_screen)
     
     
     
 def going_bathroom():
-    global aoc1_text, aoc2_text, aoc3_text, aoc4_text, aoc5_text
+    global aoc1_text, aoc2_text, aoc3_text, aoc4_text, aoc5_text, app
     global starting
     global student_out_time_counter
     start_time = time.time()
+    app.bg = (200, 30, 30)
     starting = time.strftime('%H:%M')
     if len(out_of_class1) != 0:# and len(out_of_class2) != 0 and len(out_of_class3) != 0  and len(out_of_class4) != 0  and len(out_of_class5) != 0 :
         app.warn(title = 'Student Checkout Exeeded Limit', text = 'Wait until students return before leaving the classroom')
@@ -291,8 +293,9 @@ def check_students_out_time():
         
 
 def going_drink():
-    global aoc1_text, aoc2_text, aoc3_text, aoc4_text, aoc5_text
+    global aoc1_text, aoc2_text, aoc3_text, aoc4_text, aoc5_text, app
     start_time = time.time()
+    app.bg = (200, 30, 30)
     starting = time.strftime('%H:%M')
     if len(out_of_class1) != 0:# and len(out_of_class2) != 0 and len(out_of_class3) != 0  and len(out_of_class4) != 0  and len(out_of_class5) != 0 :
         app.warn(title = 'Student Checkout Exeeded Limit', text = 'Wait until students return before leaving the classroom')
@@ -325,8 +328,9 @@ def going_drink():
     reset_screen()
 
 def going_nurse():
-    global aoc1_text, aoc2_text, aoc3_text, aoc4_text, aoc5_text
+    global aoc1_text, aoc2_text, aoc3_text, aoc4_text, aoc5_text, app
     start_time = time.time()
+    app.bg = (200, 30, 30)
     starting = time.strftime('%H:%M')
     if len(out_of_class1) != 0:# and len(out_of_class2) != 0 and len(out_of_class3) != 0  and len(out_of_class4) != 0  and len(out_of_class5) != 0 :
         app.warn(title = 'Student Checkout Exeeded Limit', text = 'Wait until students return before leaving the classroom')
@@ -358,8 +362,9 @@ def going_nurse():
     check_students_out_time()
     reset_screen()
 def going_locker():
-    global aoc1_text, aoc2_text, aoc3_text, aoc4_text, aoc5_text
+    global aoc1_text, aoc2_text, aoc3_text, aoc4_text, aoc5_text, app
     start_time = time.time()
+    app.bg = (200, 30, 30)
     starting = time.strftime('%H:%M')
     if len(out_of_class1) != 0:# and len(out_of_class2) != 0 and len(out_of_class3) != 0  and len(out_of_class4) != 0  and len(out_of_class5) != 0 :
         app.warn(title = 'Student Checkout Exeeded Limit', text = 'Wait until students return before leaving the classroom')
@@ -391,7 +396,8 @@ def going_locker():
     check_students_out_time()
     reset_screen()
 def going_dean():
-    global aoc1_text, aoc2_text, aoc3_text, aoc4_text, aoc5_text
+    global aoc1_text, aoc2_text, aoc3_text, aoc4_text, aoc5_text, app
+    app.bg = (200, 30, 30)
     start_time = time.time()
     starting = time.strftime('%H:%M')
     if len(out_of_class1) != 0: #and len(out_of_class2) != 0 and len(out_of_class3) != 0  and len(out_of_class4) != 0  and len(out_of_class5) != 0 :
@@ -424,7 +430,8 @@ def going_dean():
     check_students_out_time()
     reset_screen()
 def going_other():
-    global aoc1_text, aoc2_text, aoc3_text, aoc4_text, aoc5_text
+    global aoc1_text, aoc2_text, aoc3_text, aoc4_text, aoc5_text, app
+    app.bg = (200, 30, 30)
     start_time = time.time()
     starting = time.strftime('%H:%M')
     if len(out_of_class1) != 0:# and len(out_of_class2) != 0 and len(out_of_class3) != 0  and len(out_of_class4) != 0  and len(out_of_class5) != 0 :
@@ -478,7 +485,7 @@ def clear_students_out():
     s12_text.value = ''
     s13_text.value = ''
     s14_text.value = ''
-app = App(title = 'Pass collector', bg = (200, 30, 30))
+app = App(title = 'Pass collector', bg = (30, 200, 30))
 MenuBar(app, toplevel = ['Update'], options = [[['Time to Return', out_students], ['Students Leaving Times', student_reason], ['Exit', exit]]])
 app.full_screen = True
 hour_text = Text(app, text = 'Pick your disk number', color = 'white')
@@ -526,7 +533,7 @@ drink.visible = False
 nurse.visible = False
 other.visible = False
 students_out_box = Box(app, border = 0, width = 1200, height = 400, layout = 'grid')
-students_out_box.bg = (200, 30, 30)
+students_out_box.bg = (30, 200, 30)
 Picture(students_out_box, image = 'charger.png', grid = [1,1])
 Text(students_out_box, width = 10, grid = [2,1])
 student_out_box_left = Box(students_out_box, border = 2, height = 400,width = 400, grid = [3,1] )
