@@ -2,6 +2,7 @@ from guizero import *
 import csv
 import time
 import datetime
+import pandas as pd
 '''
 Next steps....
 
@@ -48,47 +49,54 @@ def reset_screen():
 
 
 def record_data(student_list):
+    #We want to record the information on our csv file so we can look at the data later.  
     with open('StudentsOut.csv', 'a') as csv_file:
         csv_appender = csv.writer(csv_file)
         csv_appender.writerow(student_list)
         
 def specific_names():
+    #Check times to determine class period
     check_times()
     global class_number
     global disk_number
     global combo
     global current_name
     disk_number = int(combo.value)
-    with open('StudentNames.csv') as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter = ',')
-        line_count = 0
-        for row in csv_reader:
-            if line_count == class_number:
-                name_space.value =row[disk_number]       
-                temp_out_of_class.append(row[disk_number])
-                current_name = row[disk_number]
-                checkout_button.visible = True
-                checkin_button.visible = True
-            line_count+=1
+    
+
+    SHEET_ID = '1vi5lbXkMNC73IXJ-XXqcBwa88NDXdL9dQwtZIAEb-oQ'
+    #SHEET_NAME is the name of the tab
+    SHEET_NAME = 'Names'
+    url = f'https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}'
+    df = pd.read_csv(url)
+    #Transposes the data
+    df = df.T
+    name_space.value = df._get_value(class_number, disk_number-1)
+    temp_out_of_class.append(df._get_value(class_number, disk_number-1))
+    current_name = df._get_value(class_number, disk_number-1)
+    checkout_button.visible = True
+    checkin_button.visible = True
+
 
 def check_times():
     global class_number
     global disk_number
     global combo
     if datetime.time(7, 30, 0)<datetime.datetime.now().time()<datetime.time(8, 39, 0):
-        class_number = 0
+        class_number = "Period 1"
     elif datetime.time(8, 39, 0)<datetime.datetime.now().time()<datetime.time(9, 30, 0):
-        class_number = 1
+        class_number = "Period 2"
     elif datetime.time(9, 30, 0)<datetime.datetime.now().time()<datetime.time(10, 23, 0):
-        class_number = 2
+        class_number = "Period 3"
     elif datetime.time(10, 23, 0)<datetime.datetime.now().time()<datetime.time(11, 16, 0):
-        class_number = 3
+        class_number = "Period 4"
     elif datetime.time(11, 50, 0)<datetime.datetime.now().time()<datetime.time(12, 39, 0):
-        class_number = 4
+        class_number = "Period 5"
     elif datetime.time(12, 39, 0)<datetime.datetime.now().time()<datetime.time(13, 32, 0):
-        class_number = 5
-    elif datetime.time(13,32,0)<datetime.datetime.now().time()<datetime.time(14,25,0):
-        class_number = 6
+        class_number = "Period 6"
+    elif datetime.time(13,32,0)<datetime.datetime.now().time():
+        class_number = "Period 7"
+    
     disk_number_text.value = 'Is this you?'
     combo.visible = True
     print(class_number)
@@ -116,39 +124,7 @@ def welcome_back():
             aoc1_text.destroy()
             out_of_class1 = []
             
-#     if len(out_of_class2)!=0:
-#         if current_name == out_of_class2[0]:
-#             total_time = end_time-out_of_class2[1]
-#             out_of_class2.append(total_time)
-# 
-#             record_data(out_of_class2)
-#             aoc2_text.destroy()
-#             out_of_class2 = []
-#     if len(out_of_class3)!=0:
-#         if current_name == out_of_class3[0]:
-#             total_time = end_time-out_of_class3[1]
-#             
-#             out_of_class3.append(total_time)
-#             record_data(out_of_class3)
-#             aoc3_text.destroy()
-#             out_of_class3 = []
-#     if len(out_of_class4)!=0:
-#         if current_name == out_of_class4[0]:
-#             total_time = end_time-out_of_class4[1]
-#             
-#             out_of_class4.append(total_time)
-#             record_data(out_of_class4)
-#             aoc4_text.destroy()
-#             out_of_class4 = []
-#     if len(out_of_class5)!=0:
-#         if current_name == out_of_class5[0]:
-#             total_time = end_time-out_of_class5[1]
-#             
-#             out_of_class5.append(total_time)
-#             record_data(out_of_class5)
-#             Text(student_out_box_right, text = current_name + '   ' + str(total_time))
-#             aoc5_text.destroy()
-#             out_of_class5 = []
+
 
     min_total_time = total_time//60
     total_time = total_time % 60
@@ -218,31 +194,7 @@ def going_bathroom():
         out_of_class1.append(start_time)
         out_of_class1.append('bathroom')
         aoc1_text = Text(student_out_box_left, current_name+ '----   bathroom')
-        #Text(student_reasons, current_name + ' ' + starting)
-#     elif len(out_of_class2) == 0:
-#         out_of_class2.append(current_name)
-#         out_of_class2.append(start_time)
-#         out_of_class2.append('bathroom')
-#         aoc2_text = Text(student_out_box_left, current_name+ '----   bathroom')
-#         #Text(student_reasons, current_name + ' ' + starting)
-#     elif len(out_of_class3) == 0:
-#         out_of_class3.append(current_name)
-#         out_of_class3.append(start_time)
-#         out_of_class3.append('bathroom')
-#         aoc3_text = Text(student_out_box_left, current_name+ '----   bathroom')
-#         #Text(student_reasons, current_name + ' ' + starting)
-#     elif len(out_of_class4) == 0:
-#         out_of_class4.append(current_name)
-#         out_of_class4.append(start_time)
-#         out_of_class4.append('bathroom')
-#         aoc4_text = Text(student_out_box_left, current_name+ '----   bathroom')
-#     elif len(out_of_class5) == 0:
-#         out_of_class5.append(current_name)
-#         out_of_class5.append(start_time)
-#         out_of_class5.append('bathroom')
-#         aoc5_text = Text(student_out_box_left, current_name+ '----   bathroom')
-#         #Text(student_reasons, current_name + ' ' + starting)
-#     
+        
     check_students_out_time()
     reset_screen()
 def check_students_out_time():
@@ -304,26 +256,7 @@ def going_drink():
         out_of_class1.append(start_time)
         out_of_class1.append('drink')
         aoc1_text = Text(student_out_box_left, current_name+ '----   drink')
-#     elif len(out_of_class2) == 0:
-#         out_of_class2.append(current_name)
-#         out_of_class2.append(start_time)
-#         out_of_class2.append('drink')
-#         aoc2_text = Text(student_out_box_left, current_name+ '----   drink')
-#     elif len(out_of_class3) == 0:
-#         out_of_class3.append(current_name)
-#         out_of_class3.append(start_time)
-#         out_of_class3.append('drink')
-#         aoc3_text = Text(student_out_box_left, current_name+ '----   drink')
-#     elif len(out_of_class4) == 0:
-#         out_of_class4.append(current_name)
-#         out_of_class4.append(start_time)
-#         out_of_class4.append('drink')
-#         aoc4_text = Text(student_out_box_left, current_name+ '----   drink')
-#     elif len(out_of_class5) == 0:
-#         out_of_class5.append(current_name)
-#         out_of_class5.append(start_time)
-#         out_of_class5.append('drink')
-#         aoc5_text = Text(student_out_box_left, current_name+ '----   drink')
+
     check_students_out_time()
     reset_screen()
 
@@ -332,33 +265,14 @@ def going_nurse():
     start_time = time.time()
     app.bg = (200, 30, 30)
     starting = time.strftime('%H:%M')
-    if len(out_of_class1) != 0:# and len(out_of_class2) != 0 and len(out_of_class3) != 0  and len(out_of_class4) != 0  and len(out_of_class5) != 0 :
+    if len(out_of_class1) != 0:
         app.warn(title = 'Student Checkout Exeeded Limit', text = 'Wait until students return before leaving the classroom')
     if len(out_of_class1) == 0:
         out_of_class1.append(current_name)
         out_of_class1.append(start_time)
         out_of_class1.append('nurse')
         aoc1_text = Text(student_out_box_left, current_name+ '----   nurse')
-#     elif len(out_of_class2) == 0:
-#         out_of_class2.append(current_name)
-#         out_of_class2.append(start_time)
-#         out_of_class2.append('nurse')
-#         aoc2_text = Text(student_out_box_left, current_name+ '----   nurse')
-#     elif len(out_of_class3) == 0:
-#         out_of_class3.append(current_name)
-#         out_of_class3.append(start_time)
-#         out_of_class3.append('nurse')
-#         aoc3_text = Text(student_out_box_left, current_name+ '----   nurse')
-#     elif len(out_of_class4) == 0:
-#         out_of_class4.append(current_name)
-#         out_of_class4.append(start_time)
-#         out_of_class4.append('nurse')
-#         aoc4_text = Text(student_out_box_left, current_name+ '----   nurse')
-#     elif len(out_of_class5) == 0:
-#         out_of_class5.append(current_name)
-#         out_of_class5.append(start_time)
-#         out_of_class5.append('nurse')
-#         aoc5_text = Text(student_out_box_left, current_name+ '----   nurse')
+
     check_students_out_time()
     reset_screen()
 def going_locker():
@@ -366,33 +280,14 @@ def going_locker():
     start_time = time.time()
     app.bg = (200, 30, 30)
     starting = time.strftime('%H:%M')
-    if len(out_of_class1) != 0:# and len(out_of_class2) != 0 and len(out_of_class3) != 0  and len(out_of_class4) != 0  and len(out_of_class5) != 0 :
+    if len(out_of_class1) != 0:
         app.warn(title = 'Student Checkout Exeeded Limit', text = 'Wait until students return before leaving the classroom')
     if len(out_of_class1) == 0:
         out_of_class1.append(current_name)
         out_of_class1.append(start_time)
         out_of_class1.append('locker')
         aoc1_text = Text(student_out_box_left, current_name+ '----   locker')
-#     elif len(out_of_class2) == 0:
-#         out_of_class2.append(current_name)
-#         out_of_class2.append(start_time)
-#         out_of_class2.append('locker')
-#         aoc2_text = Text(student_out_box_left, current_name+ '----   locker')
-#     elif len(out_of_class3) == 0:
-#         out_of_class3.append(current_name)
-#         out_of_class3.append(start_time)
-#         out_of_class3.append('locker')
-#         aoc3_text = Text(student_out_box_left, current_name+ '----   locker')
-#     elif len(out_of_class4) == 0:
-#         out_of_class4.append(current_name)
-#         out_of_class4.append(start_time)
-#         out_of_class4.append('locker')
-#         aoc4_text = Text(student_out_box_left, current_name+ '----   locker')
-#     elif len(out_of_class5) == 0:
-#         out_of_class5.append(current_name)
-#         out_of_class5.append(start_time)
-#         out_of_class5.append('locker')
-#         aoc5_text = Text(student_out_box_left, current_name+ '----   locker')
+
     check_students_out_time()
     reset_screen()
 def going_dean():
@@ -400,33 +295,14 @@ def going_dean():
     app.bg = (200, 30, 30)
     start_time = time.time()
     starting = time.strftime('%H:%M')
-    if len(out_of_class1) != 0: #and len(out_of_class2) != 0 and len(out_of_class3) != 0  and len(out_of_class4) != 0  and len(out_of_class5) != 0 :
+    if len(out_of_class1) != 0: 
         app.warn(title = 'Student Checkout Exeeded Limit', text = 'Wait until students return before leaving the classroom')
     if len(out_of_class1) == 0:
         out_of_class1.append(current_name)
         out_of_class1.append(start_time)
         out_of_class1.append('dean')
         aoc1_text = Text(student_out_box_left, current_name+ '----   dean')
-#     elif len(out_of_class2) == 0:
-#         out_of_class2.append(current_name)
-#         out_of_class2.append(start_time)
-#         out_of_class2.append('dean')
-#         aoc2_text = Text(student_out_box_left, current_name+ '----   dean')
-#     elif len(out_of_class3) == 0:
-#         out_of_class3.append(current_name)
-#         out_of_class3.append(start_time)
-#         out_of_class3.append('dean')
-#         aoc3_text = Text(student_out_box_left, current_name+ '----   dean')
-#     elif len(out_of_class4) == 0:
-#         out_of_class4.append(current_name)
-#         out_of_class4.append(start_time)
-#         out_of_class4.append('dean')
-#         aoc4_text = Text(student_out_box_left, current_name+ '----   dean')
-#     elif len(out_of_class5) == 0:
-#         out_of_class5.append(current_name)
-#         out_of_class5.append(start_time)
-#         out_of_class5.append('dean')
-#         aoc5_text = Text(student_out_box_left, current_name+ '----   dean')
+
     check_students_out_time()
     reset_screen()
 def going_other():
@@ -434,33 +310,14 @@ def going_other():
     app.bg = (200, 30, 30)
     start_time = time.time()
     starting = time.strftime('%H:%M')
-    if len(out_of_class1) != 0:# and len(out_of_class2) != 0 and len(out_of_class3) != 0  and len(out_of_class4) != 0  and len(out_of_class5) != 0 :
+    if len(out_of_class1) != 0:
         app.warn(title = 'Student Checkout Exeeded Limit', text = 'Wait until students return before leaving the classroom')
     if len(out_of_class1) == 0:
         out_of_class1.append(current_name)
         out_of_class1.append(start_time)
         out_of_class1.append('other')
         aoc1_text = Text(student_out_box_left, current_name+ '----   other')
-#     elif len(out_of_class2) == 0:
-#         out_of_class2.append(current_name)
-#         out_of_class2.append(start_time)
-#         out_of_class2.append('other')
-#         aoc2_text = Text(student_out_box_left, current_name+ '----   other')
-#     elif len(out_of_class3) == 0:
-#         out_of_class3.append(current_name)
-#         out_of_class3.append(start_time)
-#         out_of_class3.append('other')
-#         aoc3_text = Text(student_out_box_left, current_name+ '----   other')
-#     elif len(out_of_class4) == 0:
-#         out_of_class4.append(current_name)
-#         out_of_class4.append(start_time)
-#         out_of_class4.append('other')
-#         aoc4_text = Text(student_out_box_left, current_name+ '----   other')
-#     elif len(out_of_class5) == 0:
-#         out_of_class5.append(current_name)
-#         out_of_class5.append(start_time)
-#         out_of_class5.append('other')
-#         aoc5_text = Text(student_out_box_left, current_name+ '----   other')
+
     check_students_out_time()
     reset_screen()
     
